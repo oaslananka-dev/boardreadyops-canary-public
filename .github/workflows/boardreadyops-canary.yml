@@ -1,0 +1,21 @@
+name: BoardReadyOps Public Synthetic Canary
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  checks: read
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: boardreadyops-synthetic-canary
+  cancel-in-progress: false
+
+jobs:
+  canary:
+    uses: oaslananka/boardreadyops/.github/workflows/synthetic-target-repository-canary.yml@d93cff3819ffcbbff97ac9600f71a27844c4d005
+    with:
+      visibility: public
+      public-origin: ${{ vars.BOARDREADYOPS_CLOUD_ORIGIN }}
