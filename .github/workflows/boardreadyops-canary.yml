@@ -2,6 +2,8 @@ name: BoardReadyOps Public Synthetic Canary
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "17 */6 * * *"
 
 permissions:
   actions: read
