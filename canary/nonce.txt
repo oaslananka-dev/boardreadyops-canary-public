@@ -1,1 +1,3 @@
-initial synthetic canary fixture
+2026-08-21T12:26:07.671Z
+workflow_run_id=32481858697
+workflow_run_attempt=1
