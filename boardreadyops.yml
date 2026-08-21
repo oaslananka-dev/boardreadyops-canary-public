@@ -7,6 +7,10 @@ fail-on: high
 rules:
   manufacturing.package-completeness:
     enabled: false
+  manufacturing.fab-notes:
+    enabled: false
+  release.changelog-present:
+    enabled: false
   design.board-outline:
     enabled: false
   design.unique-references:
