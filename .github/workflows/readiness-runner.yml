@@ -46,6 +46,8 @@ jobs:
   readiness:
     if: ${{ inputs.setup_probe_id == '' }}
     permissions:
+      actions: read
+      checks: read
       contents: read
       id-token: write
     runs-on: ubuntu-latest
@@ -157,7 +159,11 @@ jobs:
       - name: Run BoardReadyOps
         id: readiness
         continue-on-error: true
-        uses: oaslananka/boardreadyops@2eb98d899025c9d7e9589d29a1c286befe95ae6a # v1.32.1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          BOARDREADYOPS_PR_HEAD_SHA: ${{ inputs.head_sha }}
+          BOARDREADYOPS_CLOUD_RUN_ID: ${{ inputs.run_id }}
+        uses: oaslananka/boardreadyops@6674db5911ed317026713ee61455b524fb25be14 # BoardReadyOps #464 merge
         with:
           project: ${{ vars.BOARDREADYOPS_PROJECT || '' }}
           config: ${{ vars.BOARDREADYOPS_CONFIG || 'boardreadyops.yml' }}
@@ -209,6 +215,10 @@ jobs:
               Array.isArray(report.findings);
             const policyFailed = reportAvailable && report.summary.failed === true;
             const operationalFailure = !reportAvailable || (readinessOutcome !== "success" && !policyFailed);
+            const hardwareImpact =
+              reportAvailable && report.hardwareImpact && typeof report.hardwareImpact === "object"
+                ? report.hardwareImpact
+                : undefined;
             const rawFindings = reportAvailable ? report.findings : [];
             const severity = (value) => value === "critical" ? "error" :
               ["error", "high", "medium", "low", "info"].includes(value) ? value : "error";
@@ -251,6 +261,7 @@ jobs:
                 findings_info: finiteMetric(summary.info),
               },
               reportLinks,
+              ...(hardwareImpact ? { hardwareImpact } : {}),
             };
             while (Buffer.byteLength(JSON.stringify(payload), "utf8") > 900 * 1024 && findings.length > 0) {
               findings.pop();
