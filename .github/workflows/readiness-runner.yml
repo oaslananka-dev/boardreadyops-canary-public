@@ -157,7 +157,7 @@ jobs:
       - name: Run BoardReadyOps
         id: readiness
         continue-on-error: true
-        uses: oaslananka/boardreadyops@ce925376bd71daf7e07f31fb1bb19a8bde30b172 # v1.24.1
+        uses: oaslananka/boardreadyops@60c7bdaf7ac7d0fa2011375c59da0768d6da1c92 # v1.32.0
         with:
           project: ${{ vars.BOARDREADYOPS_PROJECT || '' }}
           config: ${{ vars.BOARDREADYOPS_CONFIG || 'boardreadyops.yml' }}
